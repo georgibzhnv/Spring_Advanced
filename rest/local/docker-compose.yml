@@ -1,0 +1,11 @@
+services:
+  localhost:
+    image: mysql:8.0
+    container_name: mysql_container
+    environment:
+      MYSQL_DATABASE: sa_rest
+      MYSQL_PASSWORD: root123
+      MYSQL_ROOT_PASSWORD: root123
+    ports:
+      - "3306:3306"
+    command: ['--character-set-server=utf8mb4','--collation-server=utf8mb4_bin']
