@@ -1,5 +1,6 @@
 package bg.softuni.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ public class Author {
     @Column(nullable = false)
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL,
     fetch = FetchType.EAGER)
     private List<Book>books=new ArrayList<>();

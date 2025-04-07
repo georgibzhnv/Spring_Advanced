@@ -85,8 +85,6 @@ public class RestApplicationInit implements CommandLineRunner {
 
         author.setBooks(allBooks);
         authorRepository.save(author);
-
-        bookRepository.saveAll(allBooks);
     }
 }
 

@@ -1,6 +1,9 @@
 package bg.softuni.rest.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 @Entity
 @Table(name = "books")
@@ -13,6 +16,7 @@ public class Book {
     @Column(nullable = false)
     private String title;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "author_id",nullable = false)
     private Author author;
@@ -44,4 +48,5 @@ public class Book {
         this.author = author;
         return this;
     }
+
 }
