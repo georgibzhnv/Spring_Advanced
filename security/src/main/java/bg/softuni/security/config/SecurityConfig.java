@@ -1,51 +1,29 @@
 package bg.softuni.security.config;
-
-import org.springframework.boot.CommandLineRunner;
+import bg.softuni.security.repository.UserRepository;
+import bg.softuni.security.user.DemoUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-import javax.sql.DataSource;
-
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 public class SecurityConfig{
 
-    @Bean
-    CommandLineRunner init(UserDetailsService userDetailsService, PasswordEncoder encoder) {
-        return args -> {
-            JdbcUserDetailsManager manager = (JdbcUserDetailsManager) userDetailsService;
+    private final UserRepository userRepository;
 
-            if (!manager.userExists("user")) {
-                manager.createUser(User
-                        .withUsername("user")
-                        .password(encoder.encode("user"))
-                        .roles("USER")
-                        .build());
-            }
-
-            if (!manager.userExists("admin")) {
-                manager.createUser(User
-                        .withUsername("admin")
-                        .password(encoder.encode("admin"))
-                        .roles("ADMIN", "USER")
-                        .build());
-            }
-        };
+    public SecurityConfig(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Bean
-    public UserDetailsService userDetailsService(DataSource dataSource) {
-        return new JdbcUserDetailsManager(dataSource);
+    public UserDetailsService userDetailsService() {
+        return new DemoUserDetailsService(userRepository);
     }
 
     @Bean
@@ -67,8 +45,21 @@ public class SecurityConfig{
 
                 .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers.frameOptions(frame->frame.disable()));
-        ;
         return http.build();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http,
+                                                       PasswordEncoder passwordEncoder,
+                                                       UserDetailsService userDetailsService) throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder =
+                http.getSharedObject(AuthenticationManagerBuilder.class);
+
+        authenticationManagerBuilder
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(passwordEncoder);
+
+        return authenticationManagerBuilder.build();
     }
 
 }
