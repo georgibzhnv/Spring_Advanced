@@ -7,12 +7,12 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -44,6 +44,18 @@ public class CoursesController {
     private Link[] createCourseLinks(Course course){
         List<Link>result= new ArrayList<>();
 
+        Link self = linkTo(methodOn(CoursesController.class)
+                .getCourse(course.getId()))
+                .withSelfRel();
+        result.add(self);
         return  result.toArray(new Link[0]);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EntityModel<Course>>getCourse(@PathVariable("id")Long id){
+        Optional<Course> courseOptional = this.courseRepository.findById(id);
+        return courseOptional.map(
+                course -> EntityModel.of(course,createCourseLinks(course))
+        ).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 }
