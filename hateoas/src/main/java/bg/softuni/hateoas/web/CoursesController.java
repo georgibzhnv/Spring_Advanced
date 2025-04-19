@@ -1,6 +1,7 @@
 package bg.softuni.hateoas.web;
 
 import bg.softuni.hateoas.model.Course;
+import bg.softuni.hateoas.model.OrderDTO;
 import bg.softuni.hateoas.repository.CourseRepository;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
@@ -48,7 +49,15 @@ public class CoursesController {
                 .getCourse(course.getId()))
                 .withSelfRel();
         result.add(self);
-        return  result.toArray(new Link[0]);
+
+        if(course.isEnabled()){
+            Link enroll = linkTo(methodOn(OrdersController.class).createOrder(
+                    new OrderDTO().setCourseId(course.getId())
+            )).withRel("enroll");
+            result.add(enroll);
+        }
+
+        return result.toArray(new Link[0]);
     }
 
     @GetMapping("/{id}")
