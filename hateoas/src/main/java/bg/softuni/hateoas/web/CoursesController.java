@@ -7,10 +7,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -41,6 +39,16 @@ public class CoursesController {
                 linkTo(methodOn(CoursesController.class).getAllCourses())
                         .withSelfRel()));
     }
+
+    @PostMapping
+    public ResponseEntity<EntityModel<Course>>createCourse(@RequestBody Course course){
+        if (course.getId()!=null){
+            return ResponseEntity.badRequest().build();
+        }
+        Course result = courseRepository.save(course);
+        return ResponseEntity.ok(EntityModel.of(course, createCourseLinks(course)));
+    }
+
 
     private Link[] createCourseLinks(Course course){
         List<Link>result= new ArrayList<>();
