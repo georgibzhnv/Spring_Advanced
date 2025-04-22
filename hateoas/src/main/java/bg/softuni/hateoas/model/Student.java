@@ -1,5 +1,6 @@
 package bg.softuni.hateoas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -46,6 +47,7 @@ public class Student {
         return this;
     }
 
+    @JsonIgnore
     public Set<Order> getOrders() {
         return orders;
     }
