@@ -17,8 +17,49 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    developmentOnly
+    runtimeClasspath{
+        extendsFrom(developmentOnly)
+    }
+}
+
+dependencyManagement {
+    dependencies {
+        dependencySet(group: 'org.mapstruct', version: '1.5.3') {
+            entry 'mapstruct'
+            entry 'mapstruct-processor'
+        }
+        dependency "org.projectlombok:lombok:1.18.38"
+        dependency "mysql:mysql-connector-java:9.2.0"
+    }
+}
+
+
 dependencies {
+    implementation("org.springframework.data:spring-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    //implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    //implementation("org.springframework.boot:spring-boot-starter-security")
+    //implementation("org.springframework.security:spring-security-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.liquibase:liquibase-core")
+
+    compileOnly("org.webjars:webjars-locator")
+    compileOnly("org.webjars:jquery")
+    compileOnly("org.webjars:popper.js")
+    compileOnly("org.webjars:bootstrap")
+
+    compileOnly "org.mapstruct:mapstruct"
+    compileOnly "org.projectLombok:lombok"
+    annotationProcessor "org.mapstruct:mapstruct-processor"
+    annotationProcessor "org.projectLombok:lombok"
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    runtimeOnly("mysql:mysql-connector-java")
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
