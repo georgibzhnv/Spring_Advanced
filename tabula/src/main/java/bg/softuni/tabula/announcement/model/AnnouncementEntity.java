@@ -1,11 +1,9 @@
 package bg.softuni.tabula.announcement.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.Instant;
-
 
 @Data
 @Entity
@@ -16,19 +14,15 @@ public class AnnouncementEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Column
+    @Column(nullable = false)
     private Instant createdOn;
 
-    @NotNull
-    @Column
+    @Column(nullable = false)
     private Instant updatedOn;
 
-    @NotNull
-    @Column
+    @Column(nullable = false)
     private String title;
 
-    @NotNull
-    @Column
+    @Column(nullable = false)
     private String description;
 }
