@@ -14,7 +14,7 @@ java {
 }
 
 repositories {
-    mavenCentral()
+    mavenCentral()  // Maven Central repository to fetch dependencies
 }
 
 configurations {
@@ -42,22 +42,27 @@ dependencies {
     implementation("org.liquibase:liquibase-core")
     implementation("jakarta.persistence:jakarta.persistence-api:3.2.0")
 
-    compileOnly("org.webjars:webjars-locator")
-    compileOnly("org.webjars:jquery")
-    compileOnly("org.webjars:popper.js")
-    compileOnly("org.webjars:bootstrap")
+    // WebJars dependencies with specific versions
+    compileOnly "org.webjars:webjars-locator:0.52"       // Example version
+    compileOnly "org.webjars:jquery:3.7.1"               // Example version
+    compileOnly "org.webjars:popper.js:2.11.7"            // Example version
+    compileOnly "org.webjars:bootstrap:5.3.5"             // Example version
 
-    compileOnly "org.mapstruct:mapstruct"
-    annotationProcessor "org.mapstruct:mapstruct-processor"
+    // MapStruct dependencies
+    compileOnly "org.mapstruct:mapstruct:1.6.3"
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.6.3"
 
-    // Corrected Lombok dependency configuration
-    implementation "org.projectlombok:lombok:1.18.38"
+    // Corrected Lombok dependency
+    compileOnly "org.projectlombok:lombok:1.18.38"
     annotationProcessor "org.projectlombok:lombok"
 
+    // Spring DevTools for development
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-    runtimeOnly("mysql:mysql-connector-java")
+    // MySQL JDBC
+    runtimeOnly("com.mysql:mysql-connector-j:9.2.0")
 
+    // Testing dependencies
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
