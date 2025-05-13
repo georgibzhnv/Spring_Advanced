@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
       file: db/changelog/db.changelog-announcements.yaml
+  - include:
+      file: db/changelog/db.changelog-roles.yaml
+  - include:
+      file: db/changelog/db.changelog-users.yaml

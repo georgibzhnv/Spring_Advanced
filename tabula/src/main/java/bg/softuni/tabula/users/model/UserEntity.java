@@ -32,5 +32,5 @@ public class UserEntity {
             fetch = FetchType.EAGER
     )
     @JoinColumn(name = "user_id")
-    private List<RoleEntity> roleEntity;
+    private List<RoleEntity> roles;
 }
